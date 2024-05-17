@@ -7,10 +7,8 @@ db = connector.connect(
    database="caracs"
 )
 
-def Insert(query,args):
+def ToQuery(query,args):
     db.cursor().execute(query, args)
     db.commit()
     print("Query completed\n")
 
-def Delete(query,args):
-    db.cursor().execute()
