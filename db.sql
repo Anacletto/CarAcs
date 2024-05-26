@@ -154,18 +154,75 @@ END //
 DELIMITER ;
 
 DELIMITER //
-create procedure  RemoveCar(in ToDeleteId int)
+create procedure  RemoveCar(in ID int)
 BEGIN 
-    delete from carros where  id=ToDeleteId;
+    delete from carros where  id=ID;
 END //
 DELIMITER ;
 
 DELIMITER //
-create procedure  UpdateCar(in  name type)
+create procedure  ShowCar(in ID int)
 BEGIN 
-    
+    select * from carros where id=ID;
 END //
 DELIMITER ;
+
+DELIMITER //
+create procedure  UpdateCarPrice(ID,in  price float)
+BEGIN 
+    update carros set preco = price where id = ID; 
+END //
+DELIMITER ;
+
+DELIMITER //
+create procedure  UpdateCarFactoryYear(in ID int, in Newyear int)
+BEGIN 
+    update carros set anoFabrico=Newyear where id=ID;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+create procedure  UpdateCarColor(in ID int, in  Color varchar(15))
+BEGIN 
+    update carros set cor=Color where id=ID;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+create procedure  UpdateCarMaker(in ID int, in  Maker varchar(20))
+BEGIN 
+    update carros set marca=Maker where id=ID;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+create procedure  UpdateCarModel(in ID int, in  Model varchar(20))
+BEGIN 
+    update carros set modelo=Model where id=ID;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+create procedure  UpdateCarWarranty(in ID int, in Warranty int)
+BEGIN 
+    update carros set garantia=Warranty where id=ID;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+create procedure  UpdateCarQuantity(in ID int, in Quantity int)
+BEGIN 
+    update carros set quantidadeDisponivel=Quantity where id=ID;
+END //
+DELIMITER ;
+
+-- End Car CRUD
+
 
 
 -- CRUD Procedure model
@@ -177,19 +234,12 @@ END //
 DELIMITER ;
 
 DELIMITER //
-create procedure  UpdateCar(in  name type)
+create procedure  Update(in ID int, in  name type)
 BEGIN 
-    
+    update - set -=- where id=ID;
 END //
 DELIMITER ;
 
 -- End
-
-DELIMITER //
-create procedure  Name(in name type)
-BEGIN 
-
-END //
-DELIMITER ;
 
 
