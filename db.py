@@ -23,4 +23,15 @@ def AddCliente():
 
 def RemoveCliente():
     Bi = str(input("Digite o número de BI: "))
-    db.cursor().execute("delete ")
+    ToQuery(query="delete from clientes where bi like ?",args=[Bi])
+
+def UpdateInformacoesClientes():
+    Choose = int(input(": "))
+    print("""
+    
+    """)
+
+    Bi = str(input("Digite o número de BI: "))
+    ToQuery(query="update from clientes where bi like ?",args=[Bi])
+
+def
