@@ -147,21 +147,21 @@ DELIMITER ;
 -- Car procedures
 
 DELIMITER //
-create procedure AddCar(in marca varchar(20), in modelo varchar(20), in anoFabrico int, in cor varchar(15), in garantia int, in preco float, in quantidadeDisponivel int)
+create procedure CreateCar(in Marca varchar(20), in Modelo varchar(20), in AnoFabrico int, in Cor varchar(15), in Garantia int, in Preco float, in QuantidadeDisponivel int)
 BEGIN
-    insert into carros (id,marca,modelo,anoFabrico,cor,garantiapreco,quantidadeDisponivel) values (default,marca,modelo,anoFabrico,cor,garantia,preco);
+    insert into carros (id,marca,modelo,anoFabrico,cor,garanti,preco,quantidadeDisponivel) values (default,Marca,Modelo,AnoFabrico,Cor,Garantia,Preco,);
 END //
 DELIMITER ;
 
 DELIMITER //
-create procedure  RemoveCar(in ID int)
+create procedure  DeleteCar(in ID int)
 BEGIN 
     delete from carros where  id=ID;
 END //
 DELIMITER ;
 
 DELIMITER //
-create procedure  ShowCar(in ID int)
+create procedure  ReadCar(in ID int)
 BEGIN 
     select * from carros where id=ID;
 END //
@@ -223,7 +223,139 @@ DELIMITER ;
 
 -- End Car CRUD
 
+-- Client CRUD procedures
+DELIMITER //
+create procedure CreateClient(in PNome varchar(50),in SobreNome varchar(50),in AnoNascimento int,in Bairro varchar(50),in Provincia varchar(20),in cidade varchar(20))
+BEGIN
+    insert into clientes (id,primeiroNome,sobreNome,anoNascimento,bairro,provincia,cidade) values (default,PNome,SobreNome,AnoNascimento,Bairro,Provincia,cidade);
+END //
+DELIMITER ;
 
+DELEIMITER //
+create procedure ReadClient(in ID int)
+BEGIN
+    select * from clientes where id=ID;
+END//
+DELIMITER ;
+
+DELIMITER //
+create procedure DeleteClient(in ID int)
+BEGIN
+    delete from clientes where id=ID;
+END //
+DELIMITER ;
+
+CREATE PROCEDURE UpdateFirstName(IN clientID INT, IN newFirstName VARCHAR(50))
+BEGIN
+    UPDATE clientes
+    SET primeiroNome = newFirstName
+    WHERE id = clientID;
+END;
+
+-- Procedure to update the last name of a client
+CREATE PROCEDURE UpdateLastName(IN clientID INT, IN newLastName VARCHAR(50))
+BEGIN
+    UPDATE clientes
+    SET sobrenome = newLastName
+    WHERE id = clientID;
+END;
+
+-- Procedure to update the year of birth of a client
+CREATE PROCEDURE UpdateYearOfBirth(IN clientID INT, IN newYearOfBirth INT)
+BEGIN
+    UPDATE clientes
+    SET anoNascimento = newYearOfBirth
+    WHERE id = clientID;
+END;
+
+-- Procedure to update the neighborhood of a client
+CREATE PROCEDURE UpdateNeighborhood(IN clientID INT, IN newNeighborhood VARCHAR(50))
+BEGIN
+    UPDATE clientes
+    SET bairro = newNeighborhood
+    WHERE id = clientID;
+END;
+
+-- Procedure to update the province of a client
+CREATE PROCEDURE UpdateProvince(IN clientID INT, IN newProvince VARCHAR(20))
+BEGIN
+    UPDATE clientes
+    SET provincia = newProvince
+    WHERE id = clientID;
+END;
+
+-- Procedure to update the city of a client
+CREATE PROCEDURE UpdateCity(IN clientID INT, IN newCity VARCHAR(20))
+BEGIN
+    UPDATE clientes
+    SET cidade = newCity
+    WHERE id = clientID;
+END;
+-- End Client CRUD procedures
+
+-- Emplyees CRUD procedures
+DELIMITER //
+create procedure CreateEmployee(in PNome varchar(50),in SobreNome varchar(50),in AnoNascimento int,in Bairro varchar(50),in Provincia varchar(20),in cidade varchar(20))
+BEGIN
+    insert into funcionarios  (id,primeiroNome,sobreNome,anoNascimento,bairro,provincia,cidade) values (default,PNome,SobreNome,AnoNascimento,Bairro,Provincia,cidade);
+END //
+DELIMITER ;
+
+DELEIMITER //
+create procedure ReadEmployee(in ID int)
+BEGIN
+    select * from funcionarios  where id=ID;
+END//
+DELIMITER ;
+
+DELIMITER //
+create procedure DeleteEmployee(in ID int)
+BEGIN
+    delete from funcionarios  where id=ID;
+END //
+DELIMITER ;
+
+CREATE PROCEDURE UpdateFirstName(IN EmployeeID INT, IN newFirstName VARCHAR(50))
+BEGIN
+    UPDATE funcionarios 
+    SET primeiroNome = newFirstName
+    WHERE id = EmployeeID;
+END;
+
+-- Procedure to update the last name of a Employee
+CREATE PROCEDURE UpdateLastName(IN EmployeeID INT, IN newLastName VARCHAR(50))
+BEGIN
+    UPDATE funcionarios 
+    SET sobrenome = newLastName
+    WHERE id = EmployeeID;
+END;
+
+-- Procedure to update the neighborhood of a Employee
+CREATE PROCEDURE UpdateNeighborhood(IN EmployeeID INT, IN newNeighborhood VARCHAR(50))
+BEGIN
+    UPDATE funcionarios 
+    SET bairro = newNeighborhood
+    WHERE id = EmployeeID;
+END;
+
+-- Procedure to update the province of a Employee
+CREATE PROCEDURE UpdateProvince(IN EmployeeID INT, IN newProvince VARCHAR(20))
+BEGIN
+    UPDATE funcionarios 
+    SET provincia = newProvince
+    WHERE id = EmployeeID;
+END;
+
+-- Procedure to update the city of a Employee
+CREATE PROCEDURE UpdateCity(IN EmployeeID INT, IN newCity VARCHAR(20))
+BEGIN
+    UPDATE funcionarios 
+    SET cidade = newCity
+    WHERE id = EmployeeID;
+END;
+-- End employees CRUD pricedures
+
+-- CRUD procedure 
 
 -- CRUD Procedure model
 DELIMITER //
