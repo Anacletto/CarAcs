@@ -183,7 +183,6 @@ DELIMITER ;
 
 DELIMITER //DELIMITER  //
 CREATE PROCEDURE InsertCliente(
-    IN cliente_id INT,
     IN cliente_primeiroNome VARCHAR(50),
     IN cliente_sobrenome VARCHAR(50),
     IN cliente_anoNascimento INT,
@@ -193,7 +192,7 @@ CREATE PROCEDURE InsertCliente(
 )
 BEGIN
     INSERT INTO clientes (id, primeiroNome, sobrenome, anoNascimento, bairro, provincia, cidade)
-    VALUES (cliente_id, cliente_primeiroNome, cliente_sobrenome, cliente_anoNascimento, cliente_bairro, cliente_provincia, cliente_cidade);
+    VALUES (DEFAULT, cliente_primeiroNome, cliente_sobrenome, cliente_anoNascimento, cliente_bairro, cliente_provincia, cliente_cidade);
 END //
 
 
@@ -234,7 +233,6 @@ DELIMITER ;
 
 DELIMITER //DELIMITER  //
 CREATE PROCEDURE InsertFuncionario(
-    IN funcionario_id INT,
     IN funcionario_primeiroNome VARCHAR(50),
     IN funcionario_sobrenome VARCHAR(50),
     IN funcionario_provincia VARCHAR(20),
@@ -244,7 +242,7 @@ CREATE PROCEDURE InsertFuncionario(
 )
 BEGIN
     INSERT INTO funcionarios (id, primeiroNome, sobrenome, provincia, cidade, bairro, telefone)
-    VALUES (funcionario_id, funcionario_primeiroNome, funcionario_sobrenome, funcionario_provincia, funcionario_cidade, funcionario_bairro, funcionario_telefone);
+    VALUES (DEFAULT, funcionario_primeiroNome, funcionario_sobrenome, funcionario_provincia, funcionario_cidade, funcionario_bairro, funcionario_telefone);
 END //
 
 
@@ -281,7 +279,6 @@ END //
 DELIMITER ;
 
 -- Procedimentos do carro
-
 
 DELIMITER //DELIMITER  //
 CREATE PROCEDURE InsertCarro(
@@ -333,7 +330,6 @@ END //
 DELIMITER ;
 
 -- Procedimentos do cartão de credito
-
 
 DELIMITER //DELIMITER  //
 CREATE PROCEDURE InsertCartaoCredito(
@@ -428,7 +424,6 @@ DELIMITER ;
 
 DELIMITER //DELIMITER  //
 CREATE PROCEDURE InsertCompra(
-    IN compra_id INT,
     IN compra_dataCompra DATE,
     IN compra_horaCompra TIME,
     IN compra_quantidade INT,
@@ -438,7 +433,7 @@ CREATE PROCEDURE InsertCompra(
 )
 BEGIN
     INSERT INTO compras (id, dataCompra, horaCompra, quantidade, valorCompra, idcliente, idcarro)
-    VALUES (compra_id, compra_dataCompra, compra_horaCompra, compra_quantidade, compra_valorCompra, compra_idcliente, compra_idcarro);
+    VALUES (DEFAULT, compra_dataCompra, compra_horaCompra, compra_quantidade, compra_valorCompra, compra_idcliente, compra_idcarro);
 END //
 
 
@@ -478,38 +473,43 @@ DELIMITER ;
 
 
 DELIMITER //DELIMITER  //
-CREATE PROCEDURE InsertClienteLigaFuncionario(
-    IN cliente_liga_funcionario_idfuncionario INT,
-    IN cliente_liga_funcionario_idcliente INT
+CREATE PROCEDURE InsertLigacao(
+    IN funcionario_id INT,
+    IN cliente_id INT
 )
 BEGIN
     INSERT INTO clientes_liga_funcionarios (idfuncionario, idcliente)
-    VALUES (cliente_liga_funcionario_idfuncionario, cliente_liga_funcionario_idcliente);
+    VALUES (funcionario_id,cliente_id);
 END //
 
 
 DELIMITER //
-CREATE PROCEDURE GetClienteLigaFuncionario(IN cliente_liga_funcionario_idcliente INT)
+CREATE PROCEDURE GetLigacao(IN cliente_id INT)
 BEGIN
-    SELECT * FROM clientes_liga_funcionarios WHERE idcliente = cliente_liga_funcionario_idcliente;
+    SELECT * FROM clientes_liga_funcionarios WHERE idcliente = cliente_id;
 END //
 
 
 DELIMITER //
-CREATE PROCEDURE UpdateClienteLigaFuncionario(
-    IN cliente_liga_funcionario_idcliente INT,
+CREATE PROCEDURE UpdateLigacao(
+    IN Cliente_id INT,
+    IN Funcionario_id INT,
+    IN novo_idcliente INT,
     IN novo_idfuncionario INT
 )
 BEGIN
     UPDATE clientes_liga_funcionarios
-    SET idfuncionario = novo_idfuncionario
-    WHERE idcliente = cliente_liga_funcionario_idcliente;
+    SET idfuncionario = novo_idfuncionario, SET idcliente = novo_idcliente
+    WHERE idcliente = Cliente_id and idfuncionario = Funcionario_id;
 END //
 
 
 DELIMITER //
-CREATE PROCEDURE DeleteClienteLigaFuncionario(IN cliente_liga_funcionario_idcliente INT)
+CREATE PROCEDURE DeleteClienteLigaFuncionario(
+    IN Cliente_id INT,
+    IN Funcionario_id INT,
+)
 BEGIN
-    DELETE FROM clientes_liga_funcionarios WHERE idcliente = cliente_liga_funcionario_idcliente;
+    DELETE FROM clientes_liga_funcionarios WHERE idcliente = Cliente_id and idfuncionario = Funcionario_id;
 END //
 DELIMITER ;

@@ -1,0 +1,23 @@
+{
+  "name": "caracs",
+  "version": "1.0.0",
+  "description": "CarAcs  Crud API",
+  "main": "Server.js",
+  "scripts": {
+    "Server": "node --watch ./Server.mjs "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anacletto/CarAcs.git"
+  },
+  "author": "Anacleto Pedro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Anacletto/CarAcs/issues"
+  },
+  "homepage": "https://github.com/Anacletto/CarAcs#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mysql2": "^3.10.0"
+  }
+}
