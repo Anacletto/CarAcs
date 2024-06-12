@@ -4,7 +4,7 @@ const Connection = createConnection({
     host: 'localhost',
     user: 'root',
     password: 'CoderLife',
-    database: 'carAcsDB',
+    database: 'caracs',
     port:3306
 })
 

@@ -1,10 +1,9 @@
-CREATE DATABASE carAcsDB;
+CREATE DATABASE caracs;
 
-USE carAcsDB;
-
+USE caracs;
 
 CREATE TABLE clientes (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     primeiroNome VARCHAR(50) NOT NULL,
     sobrenome VARCHAR(50) NOT NULL,
     anoNascimento INT NOT NULL,
@@ -14,7 +13,7 @@ CREATE TABLE clientes (
 );
 
 CREATE TABLE funcionarios (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     primeiroNome VARCHAR(50) NOT NULL,
     sobrenome VARCHAR(50) NOT NULL,
     provincia VARCHAR(20) NOT NULL,
@@ -55,7 +54,7 @@ CREATE TABLE  testes (
         REFERENCES clientes (id),
     idcarro INT NOT NULL,
     FOREIGN KEY (idcarro)
-        REFERENCES carros (id),
+        REFERENCES carros (id)
 );
 
 CREATE TABLE compras (
@@ -74,6 +73,7 @@ CREATE TABLE compras (
 
 
 CREATE TABLE clientes_liga_funcionarios (
+    id INT PRIMARY KEY AUTO_INCREMENT,
     idfuncionario INT NOT NULL,
     FOREIGN KEY (idfuncionario)
         REFERENCES funcionarios (id),
@@ -149,39 +149,43 @@ WHERE
             carros);
 
 
-
-
-DELIMITER //DELIMITER //
-CREATE PROCEDURE FilterCarByColor(IN Color VARCHAR(15))
-BEGIN
-    SELECT id,marca,modelo,cor FROM carros WHERE cor LIKE Color; 
-END //
-DELIMITER ;
-
-
-
-
-DELIMITER //DELIMITER //
-CREATE PROCEDURE FilterCarByModel(IN Model VARCHAR(15))
-BEGIN
-    SELECT id,marca,modelo FROM carros WHERE modelo LIKE Model;
-END //
-DELIMITER ;
+-- View de todos os carros verdes
+CREATE VIEW GreenCars AS 
+    SELECT 
+        id,marca,modelo,cor 
+    FROM 
+        carros 
+    WHERE
+         cor LIKE "Verde"; 
 
 
 
-DELIMITER //DELIMITER //
-CREATE PROCEDURE FilterCarByMaker(IN Maker VARCHAR(15))
-BEGIN
-    SELECT id,marca,modelo FROM carros WHERE marca LIKE Maker; 
-END //
-DELIMITER ;
+-- Todos os carros com modelo KIA
+    SELECT 
+        id,marca,modelo 
+    FROM 
+        carros 
+    WHERE 
+        marca LIKE "Kia";
+
+
+
+
+-- View de todos carros com garantia maior de 1 ano
+CREATE VIEW LongWarranty AS 
+    SELECT 
+        id,marca,modelo,garantia
+    FROM 
+        carros 
+    WHERE 
+        garantia > 1; 
+
 
 
 -- Procedimentos do cliente
 
 
-DELIMITER //DELIMITER  //
+DELIMITER  //
 CREATE PROCEDURE InsertCliente(
     IN cliente_primeiroNome VARCHAR(50),
     IN cliente_sobrenome VARCHAR(50),
@@ -191,9 +195,10 @@ CREATE PROCEDURE InsertCliente(
     IN cliente_cidade VARCHAR(20)
 )
 BEGIN
-    INSERT INTO clientes (id, primeiroNome, sobrenome, anoNascimento, bairro, provincia, cidade)
-    VALUES (DEFAULT, cliente_primeiroNome, cliente_sobrenome, cliente_anoNascimento, cliente_bairro, cliente_provincia, cliente_cidade);
+    INSERT INTO clientes (primeiroNome, sobrenome, anoNascimento, bairro, provincia, cidade)
+    VALUES (cliente_primeiroNome, cliente_sobrenome, cliente_anoNascimento, cliente_bairro, cliente_provincia, cliente_cidade);
 END //
+DELIMITER ;
 
 
 DELIMITER //
@@ -201,24 +206,20 @@ CREATE PROCEDURE GetCliente(IN cliente_id INT)
 BEGIN
     SELECT * FROM clientes WHERE id = cliente_id;
 END //
+DELIMITER ;
 
 
 DELIMITER //
 CREATE PROCEDURE UpdateCliente(
     IN cliente_id INT,
-    IN novo_primeiroNome VARCHAR(50),
-    IN novo_sobrenome VARCHAR(50),
-    IN novo_anoNascimento INT,
-    IN novo_bairro VARCHAR(50),
-    IN novo_provincia VARCHAR(20),
-    IN novo_cidade VARCHAR(20)
+    IN novo_primeiroNome VARCHAR(50)
 )
 BEGIN
     UPDATE clientes
-    SET primeiroNome = novo_primeiroNome, sobrenome = novo_sobrenome, anoNascimento = novo_anoNascimento,
-        bairro = novo_bairro, provincia = novo_provincia, cidade = novo_cidade
+    SET primeiroNome = novo_primeiroNome
     WHERE id = cliente_id;
 END //
+DELIMITER ;
 
 
 DELIMITER //
@@ -228,10 +229,11 @@ BEGIN
 END //
 DELIMITER ;
 
+
 -- Procedimentos do funcionario
 
 
-DELIMITER //DELIMITER  //
+DELIMITER  //
 CREATE PROCEDURE InsertFuncionario(
     IN funcionario_primeiroNome VARCHAR(50),
     IN funcionario_sobrenome VARCHAR(50),
@@ -241,9 +243,10 @@ CREATE PROCEDURE InsertFuncionario(
     IN funcionario_telefone INT
 )
 BEGIN
-    INSERT INTO funcionarios (id, primeiroNome, sobrenome, provincia, cidade, bairro, telefone)
-    VALUES (DEFAULT, funcionario_primeiroNome, funcionario_sobrenome, funcionario_provincia, funcionario_cidade, funcionario_bairro, funcionario_telefone);
+    INSERT INTO funcionarios (primeiroNome, sobrenome, provincia, cidade, bairro, telefone)
+    VALUES (funcionario_primeiroNome, funcionario_sobrenome, funcionario_provincia, funcionario_cidade, funcionario_bairro, funcionario_telefone);
 END //
+DELIMITER ;
 
 
 DELIMITER //
@@ -251,24 +254,20 @@ CREATE PROCEDURE GetFuncionario(IN funcionario_id INT)
 BEGIN
     SELECT * FROM funcionarios WHERE id = funcionario_id;
 END //
+DELIMITER ;
 
 
 DELIMITER //
 CREATE PROCEDURE UpdateFuncionario(
     IN funcionario_id INT,
-    IN novo_primeiroNome VARCHAR(50),
-    IN novo_sobrenome VARCHAR(50),
-    IN novo_provincia VARCHAR(20),
-    IN novo_cidade VARCHAR(20),
-    IN novo_bairro VARCHAR(50),
-    IN novo_telefone INT
+    IN novo_primeiroNome VARCHAR(50)
 )
 BEGIN
     UPDATE funcionarios
-    SET primeiroNome = novo_primeiroNome, sobrenome = novo_sobrenome, provincia = novo_provincia,
-        cidade = novo_cidade, bairro = novo_bairro, telefone = novo_telefone
+    SET primeiroNome = novo_primeiroNome
     WHERE id = funcionario_id;
 END //
+DELIMITER ;
 
 
 DELIMITER //
@@ -278,9 +277,10 @@ BEGIN
 END //
 DELIMITER ;
 
+
 -- Procedimentos do carro
 
-DELIMITER //DELIMITER  //
+DELIMITER  //
 CREATE PROCEDURE InsertCarro(
     IN carro_preco FLOAT,
     IN carro_anoFabrico INT,
@@ -294,6 +294,7 @@ BEGIN
     INSERT INTO carros (preco, anoFabrico, cor, marca, modelo, garantia, quantidadeDisponivel)
     VALUES (carro_preco, carro_anoFabrico, carro_cor, carro_marca, carro_modelo, carro_garantia, carro_quantidadeDisponivel);
 END //
+DELIMITER ;
 
 
 DELIMITER //
@@ -301,25 +302,20 @@ CREATE PROCEDURE GetCarro(IN carro_id INT)
 BEGIN
     SELECT * FROM carros WHERE id = carro_id;
 END //
+DELIMITER ;
 
 
 DELIMITER //
 CREATE PROCEDURE UpdateCarro(
     IN carro_id INT,
-    IN novo_preco FLOAT,
-    IN novo_anoFabrico INT,
-    IN nova_cor VARCHAR(15),
-    IN nova_marca VARCHAR(20),
-    IN novo_modelo VARCHAR(20),
-    IN nova_garantia INT,
-    IN nova_quantidadeDisponivel INT
+    IN novo_preco FLOAT
 )
 BEGIN
     UPDATE carros
-    SET preco = novo_preco, anoFabrico = novo_anoFabrico, cor = nova_cor, marca = nova_marca,
-        modelo = novo_modelo, garantia = nova_garantia, quantidadeDisponivel = nova_quantidadeDisponivel
+    SET preco = novo_preco
     WHERE id = carro_id;
 END //
+DELIMITER ;
 
 
 DELIMITER //
@@ -329,9 +325,10 @@ BEGIN
 END //
 DELIMITER ;
 
+
 -- Procedimentos do cartão de credito
 
-DELIMITER //DELIMITER  //
+DELIMITER  //
 CREATE PROCEDURE InsertCartaoCredito(
     IN cartao_numeroCartao INT,
     IN cartao_dataValidade DATE,
@@ -342,6 +339,7 @@ BEGIN
     INSERT INTO cartoesCredito (numeroCartao, dataValidade, codigoSeguranca, idCliente)
     VALUES (cartao_numeroCartao, cartao_dataValidade, cartao_codigoSeguranca, cartao_idCliente);
 END //
+DELIMITER ;
 
 
 DELIMITER //
@@ -349,20 +347,20 @@ CREATE PROCEDURE GetCartaoCredito(IN cartao_numeroCartao INT)
 BEGIN
     SELECT * FROM cartoesCredito WHERE numeroCartao = cartao_numeroCartao;
 END //
+DELIMITER ;
 
 
 DELIMITER //
 CREATE PROCEDURE UpdateCartaoCredito(
     IN cartao_numeroCartao INT,
-    IN novo_dataValidade DATE,
-    IN novo_codigoSeguranca INT,
-    IN novo_idCliente INT
+    IN novo_dataValidade DATE
 )
 BEGIN
     UPDATE cartoesCredito
-    SET dataValidade = novo_dataValidade, codigoSeguranca = novo_codigoSeguranca, idCliente = novo_idCliente
+    SET dataValidade = novo_dataValidade
     WHERE numeroCartao = cartao_numeroCartao;
 END //
+DELIMITER ;
 
 
 DELIMITER //
@@ -373,21 +371,20 @@ END //
 DELIMITER ;
 
 
+
 -- Procedimentos do teste
 
 
-DELIMITER //DELIMITER  //
+DELIMITER  //
 CREATE PROCEDURE InsertTeste(
-    IN teste_id INT,
-    IN teste_dataTeste DATE,
-    IN teste_horaTeste TIME,
     IN teste_idcliente INT,
     IN teste_idcarro INT
 )
 BEGIN
-    INSERT INTO testes (id, dataTeste, horaTeste, idcliente, idcarro)
-    VALUES (teste_id, teste_dataTeste, teste_horaTeste, teste_idcliente, teste_idcarro);
+    INSERT INTO testes (dataTeste, horaTeste, idcliente, idcarro)
+    VALUES (current_date(), current_time(), teste_idcliente, teste_idcarro);
 END //
+DELIMITER ;
 
 
 DELIMITER //
@@ -395,21 +392,20 @@ CREATE PROCEDURE GetTeste(IN teste_id INT)
 BEGIN
     SELECT * FROM testes WHERE id = teste_id;
 END //
+DELIMITER ;
 
 
 DELIMITER //
 CREATE PROCEDURE UpdateTeste(
     IN teste_id INT,
-    IN novo_dataTeste DATE,
-    IN novo_horaTeste TIME,
-    IN novo_idcliente INT,
-    IN novo_idcarro INT
+    IN novo_dataTeste DATE
 )
 BEGIN
     UPDATE testes
-    SET dataTeste = novo_dataTeste, horaTeste = novo_horaTeste, idcliente = novo_idcliente, idcarro = novo_idcarro
+    SET dataTeste = novo_dataTeste
     WHERE id = teste_id;
 END //
+DELIMITER ;
 
 
 DELIMITER //
@@ -419,10 +415,11 @@ BEGIN
 END //
 DELIMITER ;
 
+
 -- Procedimentos das compras
 
 
-DELIMITER //DELIMITER  //
+DELIMITER  //
 CREATE PROCEDURE InsertCompra(
     IN compra_dataCompra DATE,
     IN compra_horaCompra TIME,
@@ -432,9 +429,10 @@ CREATE PROCEDURE InsertCompra(
     IN compra_idcarro INT
 )
 BEGIN
-    INSERT INTO compras (id, dataCompra, horaCompra, quantidade, valorCompra, idcliente, idcarro)
-    VALUES (DEFAULT, compra_dataCompra, compra_horaCompra, compra_quantidade, compra_valorCompra, compra_idcliente, compra_idcarro);
+    INSERT INTO compras (dataCompra, horaCompra, quantidade, valorCompra, idcliente, idcarro)
+    VALUES (compra_dataCompra, compra_horaCompra, compra_quantidade, compra_valorCompra, compra_idcliente, compra_idcarro);
 END //
+DELIMITER ;
 
 
 DELIMITER //
@@ -442,24 +440,20 @@ CREATE PROCEDURE GetCompra(IN compra_id INT)
 BEGIN
     SELECT * FROM compras WHERE id = compra_id;
 END //
+DELIMITER ;
 
 
 DELIMITER //
 CREATE PROCEDURE UpdateCompra(
     IN compra_id INT,
-    IN novo_dataCompra DATE,
-    IN novo_horaCompra TIME,
-    IN novo_quantidade INT,
-    IN novo_valorCompra FLOAT,
-    IN novo_idcliente INT,
-    IN novo_idcarro INT
+    IN novo_dataCompra DATE
 )
 BEGIN
     UPDATE compras
-    SET dataCompra = novo_dataCompra, horaCompra = novo_horaCompra, quantidade = novo_quantidade, 
-        valorCompra = novo_valorCompra, idcliente = novo_idcliente, idcarro = novo_idcarro
+    SET dataCompra = novo_dataCompra
     WHERE id = compra_id;
 END //
+DELIMITER ;
 
 
 DELIMITER //
@@ -469,10 +463,11 @@ BEGIN
 END //
 DELIMITER ;
 
+
 -- Procedimentos da relação clientes liga funcionarios
 
 
-DELIMITER //DELIMITER  //
+DELIMITER  //
 CREATE PROCEDURE InsertLigacao(
     IN funcionario_id INT,
     IN cliente_id INT
@@ -481,6 +476,7 @@ BEGIN
     INSERT INTO clientes_liga_funcionarios (idfuncionario, idcliente)
     VALUES (funcionario_id,cliente_id);
 END //
+DELIMITER ;
 
 
 DELIMITER //
@@ -488,28 +484,14 @@ CREATE PROCEDURE GetLigacao(IN cliente_id INT)
 BEGIN
     SELECT * FROM clientes_liga_funcionarios WHERE idcliente = cliente_id;
 END //
+DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE UpdateLigacao(
-    IN Cliente_id INT,
-    IN Funcionario_id INT,
-    IN novo_idcliente INT,
-    IN novo_idfuncionario INT
+CREATE PROCEDURE DeleteLigacao(
+    IN idligacao INT
 )
 BEGIN
-    UPDATE clientes_liga_funcionarios
-    SET idfuncionario = novo_idfuncionario, SET idcliente = novo_idcliente
-    WHERE idcliente = Cliente_id and idfuncionario = Funcionario_id;
-END //
-
-
-DELIMITER //
-CREATE PROCEDURE DeleteClienteLigaFuncionario(
-    IN Cliente_id INT,
-    IN Funcionario_id INT,
-)
-BEGIN
-    DELETE FROM clientes_liga_funcionarios WHERE idcliente = Cliente_id and idfuncionario = Funcionario_id;
+    DELETE FROM clientes_liga_funcionarios WHERE id = idligacao;
 END //
 DELIMITER ;
